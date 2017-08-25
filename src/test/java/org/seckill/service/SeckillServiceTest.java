@@ -58,6 +58,7 @@ public class SeckillServiceTest {
                 logger.error(e.getMessage());
             }
         }else {
+//            秒杀未开启
             logger.warn("exposer = {}" ,exposer);
         }
 //        INFO  o.seckill.service.SeckillServiceTest - exposer =
@@ -78,7 +79,17 @@ public class SeckillServiceTest {
         }catch (SeckillCloseException e){
             logger.error(e.getMessage());
         }
-
     }
 
+    @Test
+    public void executeSeckillProcedure(){
+        long seckillId = 1001;
+        long phone = 18322712303l;
+        Exposer exposer = seckillService.exportSeckillUrl(seckillId);
+        if (exposer.isExposed()){
+            String md5 = exposer.getMd5();
+            SeckillExecution execution = seckillService.executeSeckillProcedure(seckillId, phone, md5);
+            logger.error(execution.getStateInfo());
+        }
+    }
 }
